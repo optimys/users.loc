@@ -117,9 +117,8 @@
         public function random(){
             if(isset($_GET['action'])) {
                 $user_model = Controller::loadModel("user");
-                $max = $user_model->countUsers();
-                $response = $user_model->getUserInfo(rand(1, $max));
-                echo "User: ".$response['first_name']." ".$response['last_name']." id=".$response['id'];
+                $randomUser = $user_model->getRandomUser();
+                echo "User: ".$randomUser['first_name']." ".$randomUser['last_name']." id=".$randomUser['id'];
             }
         }
 	}

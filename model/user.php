@@ -121,6 +121,11 @@
             return $result;
         }
 
+        public function getRandomUser(){
+            $result = $this->db->query_first("SELECT * FROM `users` ORDER BY RAND() LIMIT 0,1;");
+            return $result;
+        }
+
 		/* --- PRIVATE METHODS --- */
 		private function unique_val($field, $value, $id=false) {
 			

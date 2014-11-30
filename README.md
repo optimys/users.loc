@@ -17,4 +17,7 @@ Project for testing knowledge of MVC, OOP, javascript.
 <li>Also print a list of name and email users that failed</li>
 <li>Make a button and input at user page</li>
 <li>After pressing a button ajax request must bring a random name and last name from users that stored in database</li>
+<p>Database access:</p>
+<p>username: <b>admin</b></p>
+<p>password: <b>123</b></p>
 </ol>
