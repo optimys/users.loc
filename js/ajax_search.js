@@ -33,3 +33,16 @@ function clearSearch() {
 	document.getElementById('search_text').value = '';
 	searchByFieldname(1);
 }
+
+function getRandomUser(){
+    http.open('get','/users/random?action=get');
+    http.onreadystatechange =  showResults;
+    http.send(null);
+}
+
+function showResults(){
+    if(http.readyState == 4){
+        var response = http.responseText;
+        document.getElementById('getRandomUser').value = response;
+    }
+}

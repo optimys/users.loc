@@ -115,7 +115,12 @@
 			
 			return $result['users_count'];
 		}
-		
+
+        public function getAllUsersCount(){
+            $result = $this->db->query_first("SELECT count(*) as users_count FROM users");
+            return $result;
+        }
+
 		/* --- PRIVATE METHODS --- */
 		private function unique_val($field, $value, $id=false) {
 			

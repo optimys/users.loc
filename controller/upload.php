@@ -1,16 +1,18 @@
 <?php
-
 class  Controller_upload extends Controller{
+
     public function index(){
-        if(isset($_FILES['file'])){
-            move_uploaded_file($_FILES['file']['temp_name'], "uploaded.csv");
-            $newUsersArray = new Upload('uploaded.csv');
-            $usersArray = $newUsersArray ->getArrayFromFile();
-        };
+
+        $newFile = new Upload();
+        if(!$newFile->getErrorMessage()){
+            $usersArray = $newFile->users;
+        }else{
+            $newFile->getErrorMessage();
+        }
 
         $model = Controller::loadModel('upload');
         $model->setArray($usersArray);
-        $results = $model->getFaildUsers();
+        $results = $model->getResult();
 
         $header_view = new View("header");
         $result_view = new View("upload");

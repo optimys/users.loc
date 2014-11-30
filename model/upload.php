@@ -1,73 +1,89 @@
 <?php
-class Model_upload extends Model{
+
+class Model_upload extends Model
+{
     private $inserted = 0;
     private $notInserted = 0;
     private $notInsertedUsers = array();
     private $usersArray = array();
 
-    public  function __construct(){
+    public function __construct()
+    {
         $this->db = Main::getDB();
     }
 
-    public function setArray($usersArray){
+    public function setArray($usersArray)
+    {
         $this->usersArray = $usersArray;
+        $this->checkUser($this->usersArray);
     }
 
-    private  function checkUser($usersInput = array()){
-        foreach($usersInput as $user => $field){
-            foreach($field as $value){
-                if($field ==='First name' || $field === 'E-mail'){
-                    $check = $this->select($field, $value);
-                    if(!$check){
-                        $this->insertNew('users', $user);
+    private function checkUser($users = array())
+    {   //для каждго элемента массива $users КАК $user (нам не интересны ключи)
+        foreach ($users as $user) {
+                // Для каждго массива $user как ключ(1..5)=> Значение [0]=>Alex
+            foreach ($user as $param => $value) {
+                if ($param === 2 || $param === 3) {
+                    $check = $this->select($param, $value);
+                    if (!$check) {
+                        $this->insertNew($user);
                         $this->inserted++;
-                    }else{
+                    } else {
                         $this->notInserted++;
-                        $this->notInsertedUsers[] = $usersInput['First name']."Already exists!";
+                        $this->notInsertedUsers[] = $value . " Already exists!";
                     }
                 }
             }
         }
     }
 
-    private function insertNew($table, $items = array()){
-        list($first_name, $last_name, $login, $email, $password)= $items;
-        foreach($items as $item => $fields){
-            $this->db->query_first("INSERT INTO $table(`login`, `email`, `first_name`, `last_name`, `password`) VALUES ($login, $email, $first_name, $last_name, $password)");
-        }
+    private function insertNew($items = array())
+    {
+        $newArray["first_name"] = $items[0];
+        $newArray["last_name"]  = $items[1];
+        $newArray["login"]      = $items[2];
+        $newArray["email"]      = $items[3];
+        $newArray["password"]   = $items[4];
+        //$result = $this->db->query_insert("INSERT INTO users(`login`, `email`, `first_name`, `last_name`, `password`) VALUES ('{$login}', '{$email}', '{$first_name}', '{$last_name}', '{$password}')");
+        $result = $this->db->query_insert('users', $newArray);
     }
 
-    private  function select($field, $value){
-        $result = $this->db->query_first("SELECT * WHERE {$field} = {$value}");
+    private function select($field, $value)
+    {
+        $field = $field === 2 ? "login" : "email";
+        $result = $this->db->query_first("SELECT * FROM users WHERE {$field} = '{$value}'");
         return $result;
     }
 
-    private  function getNotInserted(){
-        if($this->notInserted){
+    private function getNotInserted()
+    {
+        if ($this->notInserted) {
             return $this->notInserted;
-        }else{
+        } else {
             return false;
         }
     }
-    private  function getSuccessInserted(){
-        if($this->inserted){
+
+    private function getSuccessInserted()
+    {
+        if ($this->inserted) {
             return $this->inserted;
-        }else{
+        } else {
             return "0";
         }
     }
-    public function getFaildUsers(){
-        $faildString = "";
-        foreach($this->notInsertedUsers as $user){
-            $faildString .= "<p calss='bg-warning'>".$user."</p>";
-        }
+
+    public function getFailedUsers()
+    {
+       return $this->notInsertedUsers;
     }
 
-    public function  getResult(){
-        $resultArray=array(
+    public function  getResult()
+    {
+        $resultArray = array(
             'success' => $this->getSuccessInserted(),
-            'faild' => $this->getNotInserted(),
-            'fail_users' => $this->getFaildUsers()
+            'failed' => $this->getNotInserted(),
+            'failed_users' => $this->getFailedUsers()
         );
         return $resultArray;
     }
