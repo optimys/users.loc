@@ -12,13 +12,13 @@ class  Controller_upload extends Controller{
 
         $model = Controller::loadModel('upload');
         $model->setArray($usersArray);
-        $results = $model->getResult();
+        $results = $model->getResult(); //The data that will be print in view
 
         $header_view = new View("header");
         $result_view = new View("upload");
         $footer_view = new View("footer");
 
-        $result_view->setData($results);
+        $result_view->setData($results);    //Export data to view
 
         $header_view->display();
         $result_view->display();

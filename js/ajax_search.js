@@ -1,3 +1,8 @@
+$(document).ready(function(){
+    $('input[type=file]').bootstrapFileInput();
+    $('.file-inputs').bootstrapFileInput();
+});
+
 function createObject() {
 	var request_type;
 	var browser = navigator.appName;

@@ -35,7 +35,7 @@ class Upload{
         }while(!empty($newUsersArray[$i]) );
 
         array_shift($newUsersArray); //Removing 1-st array (fields names) from array
-        array_pop($newUsersArray);//Removing 1-st array (fields names) from array
+        array_pop($newUsersArray);//Removing last array (empty) from array
         return $newUsersArray;
     }
 
